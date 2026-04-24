@@ -1,0 +1,166 @@
+﻿{
+   "CodeGenerationMode": 6,
+   "ContextClassName": "EmployeeManagementContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "IrregularWords": null,
+   "MinimumProductVersion": "2.6.1465",
+   "ModelNamespace": null,
+   "OutputContextPath": "Data",
+   "OutputPath": "Models",
+   "PluralRules": null,
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "EmployeeManagementSystem.Shared",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "SingularRules": null,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[AdministrativeProcedures]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUserRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BasicPoliceSkills]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CeccResults]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Courses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EccRescheduling]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EccScheduling]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Employees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[IncidentReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Incidents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InitialFormations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InitialFormationStatuses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MaritalStatuses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NationalMilitaryService]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PaymentAreas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PayrollBranches]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PayrollPositionRecords]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PayrollPositions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PayrollRecords]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PerformanceEvaluation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PerformanceLevels]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PoliceSkillStatuses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProfessionalCareerServices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RecruitmentNotices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Resumes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[States]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UniquePoliceCertificates]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false,
+   "UseTypedTvpParameters": true
+}
