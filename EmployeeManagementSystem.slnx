@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="EmployeeManagementSystem.Shared/EmployeeManagementSystem.Shared.csproj" />
+  <Project Path="EmployeeManagementSystem/EmployeeManagementSystem.csproj" />
+</Solution>
