@@ -1,92 +1,166 @@
-﻿@implements IDisposable
-
-@inject NavigationManager NavigationManager
-
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">EmployeeManagementSystem</a>
+﻿@* NavMenu.razor *@
+@rendermode InteractiveServer
+<nav class="navbar-container">
+    <div class="navbar-brand">
+        @* Add your Socialight logo here *@
+        <NavLink href="" Match="NavLinkMatch.All">
+            @* <img src="images/logo.png" alt="SOCIALIGHT" class="logo-img" /> *@
+        </NavLink>
     </div>
-</div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <div class="navbar-links">
+        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">INICIO</NavLink>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="auth">
-                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
-            </NavLink>
-        </div>
-
-        <AuthorizeView>
-            <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
+        <div class="nav-dropdown">
+            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.Employees)">
+                EMPLEADOS
+            </span>
+            @if (openSubmenu == OpenSubmenu.Employees)
+            {
+                <div class="dropdown-menu-panel">
+                    <NavLink class="dropdown-item" href="EmployeesRegister" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Registrar
+                    </NavLink>
+                    <NavLink class="dropdown-item" href="EmployeeQueries" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Consultar
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <form action="Account/Logout" method="post">
-                        <AntiforgeryToken />
-                        <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-                        <button type="submit" class="nav-link">
-                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
-                        </button>
-                    </form>
-                </div>
-            </Authorized>
-            <NotAuthorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Register">
-                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+            }
+        </div>
+
+        <div class="nav-dropdown">
+            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.Reports)">
+                CONSULTAS
+            </span>
+            @if (openSubmenu == OpenSubmenu.Reports)
+            {
+                <div class="dropdown-menu-panel">
+                    <NavLink class="dropdown-item" href="queries1" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Opción 1
+                    </NavLink>
+                    <NavLink class="dropdown-item" href="queries2" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Opción 2
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Login">
-                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
-                    </NavLink>
-                </div>
-            </NotAuthorized>
-        </AuthorizeView>
-    </nav>
-</div>
+            }
+        </div>
 
-@code {
-    private string? currentUrl;
+        <NavLink class="nav-link" href="reports">REPORTES</NavLink>
+        <NavLink class="nav-link" href="career">TRAYECTORIA</NavLink>
+    </div>
+</nav>
 
-    protected override void OnInitialized()
+@if (openSubmenu != OpenSubmenu.None)
+{
+    <div class="click-outside-overlay" @onclick="CloseSubMenu"></div>
+}
+
+@code{
+
+    private enum OpenSubmenu
     {
-        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        NavigationManager.LocationChanged += OnLocationChanged;
+        None,
+        Employees,
+        Reports
     }
 
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    private OpenSubmenu openSubmenu = OpenSubmenu.None;
+
+    private void ToggleSubMenu(OpenSubmenu submenu)
     {
-        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
-        StateHasChanged();
+        openSubmenu = openSubmenu == submenu ? OpenSubmenu.None : submenu;
     }
 
-    public void Dispose()
+    private void CloseSubMenu()
     {
-        NavigationManager.LocationChanged -= OnLocationChanged;
+        openSubmenu = OpenSubmenu.None;
     }
 }
 
+<style>
+    .navbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 0 10%;
+        min-height: 80px;
+        background-color: #5b5fc7;
+        box-sizing: border-box;
+    }
+
+    .navbar-links {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-weight: bold;
+    }
+
+    .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+        white-space: nowrap;
+    }
+
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            font-weight: bold;
+        }
+
+    /* Dropdown wrapper — the key fix */
+    .nav-dropdown {
+        position: relative; /* anchor for the absolute panel */
+    }
+
+    .nav-link-toggle {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    /* Independent floating panel — does NOT affect the flex row */
+    .dropdown-menu-panel {
+        position: absolute;
+        top: calc(100% + 12px);  /*just below the navbar */
+        left: 0;
+        background-color: #5b5fc7;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 0;
+        min-width: 160px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+        z-index: 1000;
+    }
+
+    .dropdown-item {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 8px 1px;
+        transition: background-color 0.2s, color 0.2s;
+        white-space: nowrap;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: white;
+    }
+
+    .logo-img {
+        height: 40px;
+    }
+
+    .click-outside-overlay {
+        position: fixed;
+        inset: 0; /* covers the entire viewport */
+        z-index: 999; /* below dropdown-menu-panel (1000) but above everything else */
+    }
+</style>

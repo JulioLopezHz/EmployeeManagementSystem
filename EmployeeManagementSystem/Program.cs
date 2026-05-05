@@ -48,6 +48,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddScoped<IStatesService, StatesService>();
+builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 
 var app = builder.Build();
 
