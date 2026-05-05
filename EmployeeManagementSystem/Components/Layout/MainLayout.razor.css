@@ -1,7 +1,7 @@
 .page {
-    position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stack NavMenu on top of Main */
+    min-height: 100vh;
 }
 
 main {
@@ -48,7 +48,11 @@ main {
 
 @media (min-width: 641px) {
     .page {
-        flex-direction: row;
+        flex-direction: column;
+    }
+
+    main {
+        width: 100%;
     }
 
     .sidebar {
