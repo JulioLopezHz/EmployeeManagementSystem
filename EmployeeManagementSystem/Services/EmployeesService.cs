@@ -12,7 +12,7 @@ public class EmployeesService : IEmployeesService
 {
     private readonly EmployeeManagementContext _DbContext; // Replace with your actual DbContext
     private CultureInfo _cultureInfo = new CultureInfo("es-MX");
-    private const int PageSize = 2;
+    private const int PageSize = 10;
 
     public EmployeesService(EmployeeManagementContext DbContext)
     {
@@ -116,6 +116,7 @@ public class EmployeesService : IEmployeesService
         catch (Exception ex)
         {
             Console.WriteLine($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}");
+            errors.Add($"ERROR al querer guardar la información en la base de datos: {ex.Message}");
         }
         return (validEmployees.Count, errors);
     }
@@ -194,6 +195,72 @@ public class EmployeesService : IEmployeesService
         {
             Console.WriteLine($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}");
             return new();
+        }
+    }
+
+    public async Task<Employee> GetEmployeeAsync(int Id)
+    {
+        try
+        {
+            var res = await _DbContext.Employees
+                .FirstOrDefaultAsync(x => x.Id == Id);
+            return res ?? new();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}");
+            return new();
+        }
+    }
+
+    public async Task UpdateEmployeeAsync(Employee updatedEmployee)
+    {
+        try
+        {
+            var employeeFromDb = await _DbContext.Employees                
+                .FirstOrDefaultAsync(x => x.Id == updatedEmployee.Id);
+
+            if (employeeFromDb is null)
+                return;
+
+            employeeFromDb.Id = updatedEmployee.Id;
+            employeeFromDb.Name = updatedEmployee.Name;
+            employeeFromDb.LastName = updatedEmployee.LastName;
+            employeeFromDb.Rfc = updatedEmployee.Rfc;
+            employeeFromDb.Curp = updatedEmployee.Curp;
+            employeeFromDb.Cuip = updatedEmployee.Cuip;
+            employeeFromDb.HighestEducationLevel = updatedEmployee.HighestEducationLevel;
+            employeeFromDb.ProfessionalLicense = updatedEmployee.ProfessionalLicense;
+            employeeFromDb.ProfessionalLicenseDate = updatedEmployee.ProfessionalLicenseDate;
+            employeeFromDb.Gender = updatedEmployee.Gender;
+            employeeFromDb.PhoneNumber = updatedEmployee.PhoneNumber;
+            employeeFromDb.Email = updatedEmployee.Email;
+            employeeFromDb.Address = updatedEmployee.Address;
+            employeeFromDb.Neighborhood = updatedEmployee.Neighborhood;
+            employeeFromDb.Zip = updatedEmployee.Zip;
+            employeeFromDb.City = updatedEmployee.City;
+            employeeFromDb.StateId = updatedEmployee.StateId;
+            employeeFromDb.PhoneNumber2 = updatedEmployee.PhoneNumber2;
+            employeeFromDb.PhoneNumber3 = updatedEmployee.PhoneNumber3;
+            employeeFromDb.EmergencyContact = updatedEmployee.EmergencyContact;
+            employeeFromDb.Birthdate = updatedEmployee.Birthdate;
+            employeeFromDb.Height = updatedEmployee.Height;
+            employeeFromDb.MaritalStatusId = updatedEmployee.MaritalStatusId;
+            employeeFromDb.BirthPlace = updatedEmployee.BirthPlace;
+            employeeFromDb.ChildrenNumber = updatedEmployee.ChildrenNumber;
+            employeeFromDb.DriverLicense = updatedEmployee.DriverLicense;
+            employeeFromDb.LicenseType = updatedEmployee.LicenseType;
+            employeeFromDb.LicenseIssuedStateId = updatedEmployee.LicenseIssuedStateId;
+            employeeFromDb.LicenseIssuedDate = updatedEmployee.LicenseIssuedDate;
+            employeeFromDb.LicenseExpirationDate = updatedEmployee.LicenseExpirationDate;
+            employeeFromDb.IsPermanentLicense = updatedEmployee.IsPermanentLicense;
+
+            _DbContext.Employees.Update(employeeFromDb);
+            await _DbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}");
         }
     }
 

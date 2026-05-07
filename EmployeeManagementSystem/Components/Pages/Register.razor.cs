@@ -61,7 +61,7 @@ public partial class Register
 
             var result = await _employeesService.ImportUsersFromExcelAsync(ms);
 
-            if (result.count > 0)
+            if (result.count > 0 && !result.errors.Any(e => e.Contains("base de datos")))
                 _successMessage = $"Se importaron {result.count} usuarios correctamente.";
 
             _validationErrors = result.errors;

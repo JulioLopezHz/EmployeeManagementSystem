@@ -1,0 +1,442 @@
+﻿@if (_isVisible)
+{
+    <div class="modal-overlay" @onclick="Close">
+        <div class="modal-container" @onclick:stopPropagation="true">
+
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <span class="modal-icon">👤</span>
+                    <div>
+                        <h2 class="modal-title">Información del Empleado</h2>
+                        <p class="modal-subtitle">ID #@_editEmployee.Id</p>
+                    </div>
+                </div>
+                <button class="modal-close" @onclick="Close">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="field-grid">
+
+                    <div class="field-group full-width">
+                        <label class="field-label">Número de Empleado</label>
+                        <input class="field-input" type="number" min="1" step="1"
+                               @bind="_editEmployee.Id" placeholder="Ej. 10042" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Nombre(s)</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Name" placeholder="Nombre" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Apellidos</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.LastName" placeholder="Apellidos" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">RFC</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Rfc" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">CURP</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Curp" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">CUIP</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Cuip" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Nivel máximo de estudios</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.HighestEducationLevel" placeholder="Licenciatura"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Cédula profesional</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.ProfessionalLicense"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Fecha de la cédula</label>
+                        <input class="field-input" type="date"
+                               @bind="_editEmployee.ProfessionalLicenseDate" placeholder="31/01/2019">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Sexo</label>
+                        <select @bind="_editEmployee.Gender" name="Genders" id="Genders">
+                            <option value="">-- Seleccione el género --</option>
+                            @foreach(var gender in _Genders)
+                            {
+                                <option value=@gender.Key>@gender.Value</option>
+                            }
+                        </select>
+                    </div>                    
+                    <div class="field-group">
+                        <label class="field-label">Número de Teléfono</label>
+                        <input class="field-input" type="tel"
+                               @bind="_editEmployee.PhoneNumber" placeholder="+52 55 0000 0000" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Correo Electrónico</label>
+                        <input class="field-input" type="email"
+                               @bind="_editEmployee.Email" placeholder="correo@empresa.com" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Dirección</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Address" placeholder="Av. Nacional #100"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Colonia</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Neighborhood" placeholder=""/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">C.P.</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Zip" placeholder="01111"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Alcaldía (Municipio)</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.City" placeholder="Azcapotzalco"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Estado</label>
+                        <select @bind="_editEmployee.StateId" name="States" id="States">
+                            <option value="">-- Seleccione un estado --</option>
+                            @foreach(var state in _States)
+                            {
+                                <option value=@state.Key>@state.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Teléfono aux. 2</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.PhoneNumber2"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Teléfono aux. 3</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.PhoneNumber3"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">CONTACTO DE EMERGENCIA</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.EmergencyContact"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Fecha de nacimiento</label>
+                        <input class="field-input" type="date"
+                               @bind="_editEmployee.Birthdate" placeholder="31/12/1999"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Lugar de nacimiento</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.BirthPlace" placeholder=""/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Altura (cm)</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.Height" placeholder="170"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Estado civil</label>
+                        <select @bind="_editEmployee.MaritalStatusId" name="MaritalStatuses" id="MaritalStatuses">
+                            @foreach(var maritalStatus in _MaritalStatuses)
+                            {
+                                if(_editEmployee.StateId != maritalStatus.Key)
+                                {
+                                    <option value=@maritalStatus.Key>@maritalStatus.Value</option>
+                                }
+                                else
+                                {
+                                    <option value=@maritalStatus.Key selected>@maritalStatus.Value</option>
+                                }
+                            }
+                        </select>
+                    </div>                  
+                    <div class="field-group">
+                        <label class="field-label">Cantidad de hijos</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.ChildrenNumber" placeholder=""/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">ID Licencia de conducción</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.DriverLicense" placeholder=""/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Tipo de licencia</label>
+                        <input class="field-input" type="text"
+                               @bind="_editEmployee.LicenseType" placeholder=""/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Estado emisor de la licencia</label>
+                        <select @bind="_editEmployee.LicenseIssuedStateId" name="States2" id="States2">
+                            <option value="">-- Seleccione un estado --</option>
+                            @foreach(var state in _States)
+                            {
+                                <option value=@state.Key>@state.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Fecha de emisión de la licencia</label>
+                        <input class="field-input" type="date"
+                               @bind="_editEmployee.LicenseIssuedDate"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Estado emisor de la licencia</label>
+                        <input class="field-input" type="date"
+                               @bind="_editEmployee.LicenseExpirationDate"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Licencia permanente</label>
+                        <select @onchange="OnStatusChanged" name="Permanent" id="Permanent">
+                            <option value="">-- Seleccione --</option>
+                            <option value="True" selected="@(_editEmployee.IsPermanentLicense == true)">SÍ</option>
+                            <option value="False" selected="@(_editEmployee.IsPermanentLicense == false)">NO</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" @onclick="Close">Cancelar</button>
+                <button class="btn-save" @onclick="Save">
+                    <span>Guardar Cambios</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+}
+
+<style>
+    /* ── Overlay ─────────────────────────────────────────── */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 14, 26, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: overlayIn .18s ease;
+    }
+
+    @@keyframes overlayIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* ── Container ───────────────────────────────────────── */
+    .modal-container {
+        background: #ffffff;
+        border-radius: 16px;
+        width: min(1600px, 95vw);
+        height: min(800px, 80vw);
+        display: flex;
+        flex-direction: column;
+        box-shadow:
+            0 4px 6px rgba(0,0,0,.04),
+            0 20px 60px rgba(0,0,0,.18);
+        animation: slideUp .22s cubic-bezier(.34,1.26,.64,1);
+        overflow: hidden;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    @@keyframes slideUp {
+        from { opacity: 0; transform: translateY(28px) scale(.97); }
+        to   { opacity: 1; transform: translateY(0)   scale(1);    }
+    }
+
+    /* ── Header ──────────────────────────────────────────── */
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 28px 18px;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #1a3a6b 0%, #1e5799 100%);
+    }
+
+    .modal-title-group {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .modal-icon {
+        font-size: 2rem;
+        background: rgba(255,255,255,.15);
+        border-radius: 10px;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -.01em;
+    }
+
+    .modal-subtitle {
+        margin: 2px 0 0;
+        font-size: .8rem;
+        color: rgba(255,255,255,.65);
+    }
+
+    .modal-close {
+        background: rgba(255,255,255,.15);
+        border: none;
+        color: #fff;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background .15s;
+        flex-shrink: 0;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,.28); }
+
+    /* ── Body ────────────────────────────────────────────── */
+    .modal-body {
+        padding: 24px 28px;
+        overflow-y: auto;
+        flex: 1 1 0;
+        min-height: 0;
+        /* Custom scrollbar */
+        scrollbar-width: thin;
+        scrollbar-color: #c5cfe8 transparent;
+    }
+
+    .modal-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .modal-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+        background: #c5cfe8;
+        border-radius: 99px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb:hover {
+        background: #1e5799;
+    }
+
+    .field-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); /* Cantidad de columnas */
+        gap: 18px 20px;
+    }
+
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-group.full-width { grid-column: 1 / -1; }
+
+    .field-label {
+        font-size: .75rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+    }
+
+    .field-input {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 9px 13px;
+        font-size: .92rem;
+        color: #111827;
+        background: #f9fafb;
+        transition: border-color .15s, box-shadow .15s, background .15s;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .field-input:focus {
+        border-color: #1e5799;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(30,87,153,.12);
+    }
+
+    .field-input:hover:not(:focus) {
+        border-color: #9ca3af;
+        background: #ffffff;
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 16px 28px 22px;
+        border-top: 1px solid #f0f0f0;
+        flex-shrink: 0;
+    }
+
+    .btn-cancel {
+        background: transparent;
+        border: 1.5px solid #d1d5db;
+        color: #374151;
+        padding: 9px 22px;
+        border-radius: 8px;
+        font-size: .9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: border-color .15s, background .15s;
+    }
+
+    .btn-cancel:hover {
+        border-color: #9ca3af;
+        background: #f3f4f6;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #1a3a6b 0%, #1e5799 100%);
+        border: none;
+        color: #ffffff;
+        padding: 9px 26px;
+        border-radius: 8px;
+        font-size: .9rem;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: .01em;
+        transition: opacity .15s, transform .12s;
+        box-shadow: 0 2px 8px rgba(30,87,153,.35);
+    }
+
+    .btn-save:hover  { opacity: .9; transform: translateY(-1px); }
+    .btn-save:active { opacity: 1;  transform: translateY(0);    }
+
+    @@media (max-width: 900px) {
+        .field-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @@media (max-width: 600px) {
+        .field-grid { grid-template-columns: 1fr; }
+        .modal-body { padding: 18px; }
+        .modal-header, .modal-footer { padding-left: 18px; padding-right: 18px; }
+    }
+</style>
