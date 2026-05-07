@@ -1,5 +1,7 @@
-﻿using EmployeeManagementSystem.Interfaces;
+﻿using EmployeeManagementSystem.Components.Modals;
+using EmployeeManagementSystem.Interfaces;
 using EmployeeManagementSystem.Shared.DTOs;
+using EmployeeManagementSystem.Shared.Models;
 
 namespace EmployeeManagementSystem.Components.Pages;
 
@@ -22,6 +24,8 @@ public partial class EmployeeQueries
     private string _staticLastname = null;
     private string _staticRfc = null;
     private string _staticCuip = null;
+
+    private EmployeeInformationModal _modal = default!;
 
     public EmployeeQueries(IEmployeesService employeesService)
     {
@@ -58,5 +62,39 @@ public partial class EmployeeQueries
 
         _isLoading = false;
         StateHasChanged();
+    }
+
+    private async Task OpenModal(int employeeId)
+    {
+        try
+        {
+            await _modal.Open(employeeId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}");
+        }
+    }
+
+    private async Task HandleSave(Employee updated)
+    {
+        // Find the record in the local list and update it
+        var idx = _Employees.FindIndex(e => e.Id == updated.Id);
+        if (idx >= 0)
+        {
+            _Employees[idx] = new EmployeeDto
+            {
+                Id = updated.Id,
+                Name = updated.Name,
+                LastName = updated.LastName,
+                Rfc = updated.Rfc ?? "",
+                Cuip = updated.Cuip ?? "",
+                PhoneNumber = updated.PhoneNumber ?? "",
+                Email = updated.Email ?? ""
+            };
+        }            
+
+        // Persist to your backend here, e.g.:
+        await _employeesService.UpdateEmployeeAsync(updated);         
     }
 }

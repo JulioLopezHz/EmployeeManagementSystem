@@ -44,7 +44,7 @@
     {
         <div class="alert alert-warning mt-3">
             <strong>Errores:</strong>
-            <ul class="mb-0 mt-1">
+            <ul class="mb-0 mt-1" style="max-height: 150px; overflow-y: auto; list-style-position: inside;">
                 @foreach (var error in _validationErrors)
                 {
                     <li>@error</li>
