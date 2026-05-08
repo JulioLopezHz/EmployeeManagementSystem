@@ -51,6 +51,42 @@ public partial class EmployeeQueries
         StateHasChanged();
     }
 
+    private IEnumerable<int> GetPageNumbers()
+    {
+        // Muestra todas las páginas si el total es 10 o menos
+        if (_totalPages <= 10)
+        {
+            return Enumerable.Range(1, _totalPages);
+        }
+
+        // Muestra las primeras 9 páginas + puntos suspensivos + última página
+        // -1 se usa como un valor centinela para renderizar la elipsis
+        var pages = new List<int>();
+
+        if (_currentPage <= 9)
+        {
+            pages.AddRange(Enumerable.Range(1, 9)); // Páginas 1–9
+            pages.Add(-1);                          // puntos suspensivos
+            pages.Add(_totalPages);                 // Última página
+        }
+        else if (_currentPage >= _totalPages - 1)
+        {
+            pages.Add(1);                                                      // Primera página
+            pages.Add(-1);                                                     // puntos suspensivos
+            pages.AddRange(Enumerable.Range(_totalPages - 8, 9));              // Últimas 9 páginas
+        }
+        else
+        {
+            pages.Add(1);                                         // Primera página
+            pages.Add(-1);                                        // puntos suspensivos
+            pages.AddRange(Enumerable.Range(_currentPage - 2, 5)); // Ventana: 2 antes → actual → 2 después
+            pages.Add(-1);                                        // puntos suspensivos
+            pages.Add(_totalPages);                               // Última página
+        }
+
+        return pages;
+    }
+
     private async Task ChangePage(int pageId)
     {
         _currentPage = pageId;

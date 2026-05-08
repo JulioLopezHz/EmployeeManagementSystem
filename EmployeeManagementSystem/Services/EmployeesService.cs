@@ -19,6 +19,11 @@ public class EmployeesService : IEmployeesService
         _DbContext = DbContext;
     }
 
+    /// <summary>
+    /// Procesa la información de un archivo Excel para crear nuevos empleados en la base de datos. El archivo debe tener una estructura específica con los campos en el orden correcto, de lo contrario se generarán errores. Si un empleado con el mismo Id ya existe en la base de datos, no se creará nuevamente y se agregará un mensaje de error indicando que el elemento ya existe.
+    /// </summary>
+    /// <param name="fileStream">Stream del archivo Excel</param>
+    /// <returns>Una tupla que contiene el número de empleados importados y una lista de errores encontrados durante la importación</returns>
     public async Task<(int count, List<string> errors)> ImportUsersFromExcelAsync(Stream fileStream)
     {
         var employees = new List<Employee>();
@@ -71,7 +76,7 @@ public class EmployeesService : IEmployeesService
                         IsPermanentLicense =        !row.Cell(34).IsEmpty() ? getBool(row.Cell(34).GetValue<string>()) : null
                     };
 
-                    // Basic validation
+                    // Se valida que los campos requeridos sean correctos
                     if (string.IsNullOrWhiteSpace(employee.Name))
                         errors.Add($"Fila {row.RowNumber()}: El nombre es requerido.");
                     else if (string.IsNullOrWhiteSpace(employee.LastName))
@@ -81,6 +86,7 @@ public class EmployeesService : IEmployeesService
                 }
                 catch (Exception ex)
                 {
+                    // Si ocurre un error al convertir los datos, se agrega un mensaje de error específico para esa fila
                     errors.Add($"Fila {row.RowNumber()}: Error al convertir los datos. {ex.Message}");
                 }
             }
@@ -121,11 +127,24 @@ public class EmployeesService : IEmployeesService
         return (validEmployees.Count, errors);
     }
 
+    /// <summary>
+    /// Calcula el número total de páginas necesarias para mostrar los empleados de acuerdo a los filtros recibidos y al tamaño de página definido.
+    /// </summary>
+    /// <param name="Id"></param>
+    /// <param name="Name"></param>
+    /// <param name="Lastname"></param>
+    /// <param name="Rfc"></param>
+    /// <param name="Curp"></param>
+    /// <param name="Cuip"></param>
+    /// <param name="PhoneNumber"></param>
+    /// <param name="Email"></param>
+    /// <returns>El total de páginas calculadas</returns>
     public async Task<int> GetEmployeesPaginationAsync(int? Id = null, string? Name = null, string? Lastname = null, string? Rfc = null, string? Curp = null,
         string? Cuip = null, string? PhoneNumber = null, string? Email = null)
     {
         try
         {
+            //Se filtra la información de acuerdo a los parámetros recibidos, si un parámetro es nulo, se ignora en el filtro
             var query = _DbContext.Employees
                 .AsNoTracking()
                 .Where(e =>
@@ -139,6 +158,7 @@ public class EmployeesService : IEmployeesService
                 && (Email == null || (e.Email != null && e.Email.Contains(Email)))
                 );
 
+            //Si sobran elementos sobre el tamaño de la página, se agrega una página adicional para mostrar el resto
             bool areThereRemainingElements = (query.Count() % PageSize) >= 1;
             int totalPages = query.Count() / PageSize;
             totalPages = areThereRemainingElements ? totalPages + 1: totalPages;
@@ -152,11 +172,26 @@ public class EmployeesService : IEmployeesService
         }
     }
 
+    /// <summary>
+    /// Obtiene la lista de elementos de acuerdo a los filtros recibidos y al número de página solicitado.
+    /// </summary>
+    /// <param name="pageNumber"></param>
+    /// <param name="Id"></param>
+    /// <param name="Name"></param>
+    /// <param name="Lastname"></param>
+    /// <param name="Rfc"></param>
+    /// <param name="Curp"></param>
+    /// <param name="Cuip"></param>
+    /// <param name="PhoneNumber"></param>
+    /// <param name="Email"></param>
+    /// <returns>Lista de DTOs</returns>
     public async Task<List<EmployeeDto>> GetEmployeesAsync(int pageNumber, int? Id = null, string? Name = null, string? Lastname = null, string? Rfc = null, string? Curp = null,
         string? Cuip = null, string? PhoneNumber = null, string? Email = null)
     {
         try
         {
+            //Se filtra la información de acuerdo a los parámetros recibidos, si un parámetro es nulo, se ignora en el filtro.
+            //Los elementos a obtener se limitan al tamaño de la página y al número de página recibido.
             var query = await _DbContext.Employees
                 .AsNoTracking()
                 .Where(e =>
@@ -173,6 +208,7 @@ public class EmployeesService : IEmployeesService
                 .Take(PageSize)
                 .ToListAsync();
 
+            //Se genera la lista de objetos DTO que se enviarán al cliente, solo se incluyen los campos necesarios para mostrar en la tabla
             var result = new List<EmployeeDto>();
             foreach (var employee in query)
             {
@@ -198,6 +234,11 @@ public class EmployeesService : IEmployeesService
         }
     }
 
+    /// <summary>
+    /// Ontiene la información completa del empleado de acuerdo al Id recibido, se recomienda usar este método solo para obtener la información de un empleado específico.
+    /// </summary>
+    /// <param name="Id">Número de empleado</param>
+    /// <returns>Objeto Employee con la información completa del empleado</returns>
     public async Task<Employee> GetEmployeeAsync(int Id)
     {
         try
@@ -213,6 +254,11 @@ public class EmployeesService : IEmployeesService
         }
     }
 
+    /// <summary>
+    /// Actualiza todas las propiedades del empleado, se recomienda enviar el objeto completo con las propiedades que no se quieran actualizar con su valor actual para evitar perder información.
+    /// </summary>
+    /// <param name="updatedEmployee">El objeto Employee con los datos actualizados.</param>
+    /// <returns></returns>
     public async Task UpdateEmployeeAsync(Employee updatedEmployee)
     {
         try

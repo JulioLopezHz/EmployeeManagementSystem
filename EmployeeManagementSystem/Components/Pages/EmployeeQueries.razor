@@ -101,13 +101,20 @@
                 &#60;
             </button>
 
-            @for (int i = 1; i <= _totalPages; i++)
+            @foreach (var page in GetPageNumbers())
             {
-                int index = i;
-                <button class="page-btn @(_currentPage == index ? "active" : "")"
-                        @onclick="() => ChangePage(index)">
-                    @index
-                </button>
+                if (page == -1)
+                {
+                    <span class="page-ellipsis">&#8230;</span>
+                }
+                else
+                {
+                    int index = page;
+                    <button class="page-btn @(_currentPage == index ? "active" : "")"
+                            @onclick="() => ChangePage(index)">
+                        @index
+                    </button>
+                }
             }
 
             <button class="page-btn"
@@ -229,6 +236,18 @@ else
         gap: 6px;
         padding: 16px 0;
         border-top: 1px solid #ddd;
+    }
+
+    .page-ellipsis {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        color: #666;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        user-select: none;
     }
 
     .page-btn {
