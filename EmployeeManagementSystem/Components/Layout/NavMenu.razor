@@ -13,7 +13,7 @@
 
         <div class="nav-dropdown">
             <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.Employees)">
-                EMPLEADOS
+                PERSONAL
             </span>
             @if (openSubmenu == OpenSubmenu.Employees)
             {
@@ -29,17 +29,17 @@
         </div>
 
         <div class="nav-dropdown">
-            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.Reports)">
-                CONSULTAS
+            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.TrustControl)">
+                CONTROL DE CONFIANZA
             </span>
-            @if (openSubmenu == OpenSubmenu.Reports)
+            @if (openSubmenu == OpenSubmenu.TrustControl)
             {
                 <div class="dropdown-menu-panel">
-                    <NavLink class="dropdown-item" href="queries1" @onclick="CloseSubMenu">
-                        <span class="bi bi-plus-square-fill"></span>Opción 1
+                    <NavLink class="dropdown-item" href="TrustControlRegister" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Registro
                     </NavLink>
-                    <NavLink class="dropdown-item" href="queries2" @onclick="CloseSubMenu">
-                        <span class="bi bi-plus-square-fill"></span>Opción 2
+                    <NavLink class="dropdown-item" href="TrustControlQueries" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Consultas
                     </NavLink>
                 </div>
             }
@@ -61,7 +61,7 @@
     {
         None,
         Employees,
-        Reports
+        TrustControl
     }
 
     private OpenSubmenu openSubmenu = OpenSubmenu.None;

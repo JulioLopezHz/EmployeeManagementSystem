@@ -1,4 +1,4 @@
-﻿@page "/EmployeeQueries"
+﻿@page "/TrustControlQueries"
 @using EmployeeManagementSystem.Components.Modals
 @rendermode InteractiveServer
 
@@ -66,7 +66,7 @@
                             <td>
                                 <div style="overflow-x: auto; white-space: nowrap; max-width: 100%;">
                                     @employee.Name
-                                </div>                                
+                                </div>
                             </td>
                             <td>
                                 <div style="overflow-x: auto; white-space: nowrap; max-width: 100%;">
@@ -88,7 +88,7 @@
                             </td>
                         </tr>
                     }
-                </tbody>    
+                </tbody>
             </table>
         </div>
 
@@ -138,7 +138,7 @@ else
         display: flex;
         gap: 20px; /* Space between each pair */
         flex-wrap: wrap; /* Allows wrapping on small screens */
-        align-items: flex-end; /* aligns all children to the bottom baseline */        
+        align-items: flex-end; /* aligns all children to the bottom baseline */
     }
 
     /* Keeps labels on top of their inputs */
@@ -171,16 +171,16 @@ else
         border-bottom: 1px solid #999999;
     }
 
-    .tableHead{
+    .tableHead {
         font-size: 14px;
     }
 
-    th{
+    th {
         background-color: #2E427D;
         color: white;
     }
 
-    th,td {
+    th, td {
         padding: 0.5em;
         border: 1px solid #999999;
     }
@@ -261,23 +261,23 @@ else
         transition: background-color 0.2s;
     }
 
-    .page-btn:hover:not(:disabled) {
-        background-color: #2E427D;
-        color: white;
-    }
+        .page-btn:hover:not(:disabled) {
+            background-color: #2E427D;
+            color: white;
+        }
 
-    .page-btn.active {
-        background-color: #2E427D;
-        color: white;
-    }
+        .page-btn.active {
+            background-color: #2E427D;
+            color: white;
+        }
 
-    .page-btn:disabled {
-        border-color: #aaa;
-        color: #aaa;
-        cursor: not-allowed;
-    }
+        .page-btn:disabled {
+            border-color: #aaa;
+            color: #aaa;
+            cursor: not-allowed;
+        }
 
-    .buttonTable{
+    .buttonTable {
         text-align: center;
         vertical-align: middle;
     }

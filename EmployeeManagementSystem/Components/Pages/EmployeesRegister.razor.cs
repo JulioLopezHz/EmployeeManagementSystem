@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace EmployeeManagementSystem.Components.Pages;
 
-public partial class Register
+public partial class EmployeesRegister
 {
     private readonly IEmployeesService _employeesService;
     private IBrowserFile? _selectedFile;
@@ -16,7 +16,7 @@ public partial class Register
 
     private const long MaxFileSizeBytes = 10 * 1024 * 1024; // 10 MB
 
-    public Register(IEmployeesService employeesImportService)
+    public EmployeesRegister(IEmployeesService employeesImportService)
     {
         _employeesService = employeesImportService;
     }
