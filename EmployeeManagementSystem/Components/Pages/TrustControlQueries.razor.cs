@@ -7,8 +7,8 @@ namespace EmployeeManagementSystem.Components.Pages;
 
 public partial class TrustControlQueries
 {
-    private readonly IEmployeesService _employeesService;
-    private List<EmployeeDto> _Employees = new List<EmployeeDto>();
+    private readonly ITrustControlService _trustControlService;
+    private List<TrustControlDto> _Employees = new List<TrustControlDto>();
     private bool _isLoading = false;
     private int _totalPages = 1;
     private int _currentPage = 1;
@@ -25,11 +25,11 @@ public partial class TrustControlQueries
     private string _staticRfc = null;
     private string _staticCuip = null;
 
-    private EmployeeInformationModal _modal = default!;
+    private TrustControlInformationModal _modal = default!;
 
-    public TrustControlQueries(IEmployeesService employeesService)
+    public TrustControlQueries(ITrustControlService trustControlService)
     {
-        _employeesService = employeesService;
+        _trustControlService = trustControlService;
     }
 
     private async Task FilterEmployees()
@@ -44,8 +44,8 @@ public partial class TrustControlQueries
         _staticLastname = _lastname;
         _staticRfc = _rfc;
         _staticCuip = _cuip;
-        _totalPages = await _employeesService.GetEmployeesPaginationAsync(_staticEmployeeNumber, _staticName, _staticLastname, _staticRfc, null, _staticCuip);
-        _Employees = await _employeesService.GetEmployeesAsync(1, _staticEmployeeNumber, _staticName, _staticLastname, _staticRfc, null, _staticCuip);
+        _totalPages = await _trustControlService.GetTrustControlsPaginationAsync(_staticEmployeeNumber, _staticName, _staticLastname, _staticRfc, null, _staticCuip);
+        _Employees = await _trustControlService.GetTrustControlsAsync(1, _staticEmployeeNumber, _staticName, _staticLastname, _staticRfc, null, _staticCuip);
 
         _isLoading = false;
         StateHasChanged();
@@ -94,7 +94,7 @@ public partial class TrustControlQueries
         StateHasChanged();
 
         await Task.Delay(200);
-        _Employees = await _employeesService.GetEmployeesAsync(pageId, _staticEmployeeNumber, _staticName, _staticLastname, _staticRfc, null, _staticCuip);
+        _Employees = await _trustControlService.GetTrustControlsAsync(pageId, _staticEmployeeNumber, _staticName, _staticLastname, _staticRfc, null, _staticCuip);
 
         _isLoading = false;
         StateHasChanged();
@@ -116,21 +116,21 @@ public partial class TrustControlQueries
     {
         // Find the record in the local list and update it
         var idx = _Employees.FindIndex(e => e.Id == updated.Id);
-        if (idx >= 0)
-        {
-            _Employees[idx] = new EmployeeDto
-            {
-                Id = updated.Id,
-                Name = updated.Name,
-                LastName = updated.LastName,
-                Rfc = updated.Rfc ?? "",
-                Cuip = updated.Cuip ?? "",
-                PhoneNumber = updated.PhoneNumber ?? "",
-                Email = updated.Email ?? ""
-            };
-        }
+        //if (idx >= 0)
+        //{
+        //    _Employees[idx] = new EmployeeDto
+        //    {
+        //        Id = updated.Id,
+        //        Name = updated.Name,
+        //        LastName = updated.LastName,
+        //        Rfc = updated.Rfc ?? "",
+        //        Cuip = updated.Cuip ?? "",
+        //        PhoneNumber = updated.PhoneNumber ?? "",
+        //        Email = updated.Email ?? ""
+        //    };
+        //}
 
-        // Persist to your backend here, e.g.:
-        await _employeesService.UpdateEmployeeAsync(updated);
+        //// Persist to your backend here, e.g.:
+        //await _trustControlService.UpdateEmployeeAsync(updated);
     }
 }

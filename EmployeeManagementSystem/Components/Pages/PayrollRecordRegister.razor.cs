@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace EmployeeManagementSystem.Components.Pages;
 
-public partial class TrustControlRegister
+public partial class PayrollRecordRegister
 {
-    private readonly ITrustControlService _TrustControlService;
+    private readonly IPayrollRecordService _PayrollRecordService;
     private IBrowserFile? _selectedFile;
     private string _fileInfo = string.Empty;
     private List<string> _validationErrors = new();
@@ -16,9 +16,9 @@ public partial class TrustControlRegister
 
     private const long MaxFileSizeBytes = 10 * 1024 * 1024; // 10 MB
 
-    public TrustControlRegister(ITrustControlService trustControlService)
+    public PayrollRecordRegister(IPayrollRecordService payrollRecordService)
     {
-        _TrustControlService = trustControlService;
+        _PayrollRecordService = payrollRecordService;
     }
 
     private void OnFileSelected(InputFileChangeEventArgs e)
@@ -59,7 +59,7 @@ public partial class TrustControlRegister
             await stream.CopyToAsync(ms);
             ms.Position = 0;
 
-            var result = await _TrustControlService.ImportTrustControlsFromExcelAsync(ms);
+            var result = await _PayrollRecordService.ImportPayrollRecordsFromExcelAsync(ms);
 
             if (result.count > 0 && !result.errors.Any(e => e.Contains("base de datos")))
                 _successMessage = $"Se importaron {result.count} usuarios correctamente.";

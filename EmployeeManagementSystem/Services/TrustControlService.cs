@@ -8,13 +8,12 @@ using System.Globalization;
 
 namespace EmployeeManagementSystem.Services;
 
-public class TrustControlService
+public class TrustControlService : ITrustControlService
 {
-    private readonly EmployeeManagementContext _DbContext; // Replace with your actual DbContext
+    private readonly EmployeeManagementContext _DbContext;
     private CultureInfo _cultureInfo = new CultureInfo("es-MX");
     private const int PageSize = 10;
 
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CeccResults
     public TrustControlService(EmployeeManagementContext DbContext)
     {
         _DbContext = DbContext;
@@ -41,22 +40,35 @@ public class TrustControlService
             {
                 try
                 {
+                    var expirationDate = !row.Cell(6).IsEmpty() ? getDate(row.Cell(6).GetValue<string>()) : null;
+                    var employeeNumber = row.Cell(1).GetValue<int>();
+
+                    if (employeeNumber == 0)
+                    {
+                        errors.Add($"Fila {row.RowNumber()}: El número de empleado es requerido.");
+                        continue;
+                    }
+                    // Valida que la FK exista en la Base de Datos, si no existe, se agrega un mensaje de error
+                    var employeeExists = await _DbContext.Employees.AnyAsync(e => e.Id == employeeNumber);
+                    if (!employeeExists)
+                    {
+                        errors.Add($"Fila {row.RowNumber()}: El empleado con número '{employeeNumber}' no existe.");
+                        continue;
+                    }
+
                     var employee = new CeccResult
                     {
                         EmployeeNumber = row.Cell(1).GetValue<int>(),
-                        OfficialLetter = !row.Cell(2).IsEmpty() ? row.Cell(4).GetValue<string?>() : null,
+                        OfficialLetter = !row.Cell(2).IsEmpty() ? row.Cell(2).GetValue<string?>() : null,
                         OfficialLetterDate = !row.Cell(3).IsEmpty() ? getDate(row.Cell(3).GetValue<string>()) : null,
                         IsApproved = !row.Cell(4).IsEmpty() ? getBool(row.Cell(4).GetValue<string>()) : null,
                         IsInforce = !row.Cell(5).IsEmpty() ? getBool(row.Cell(5).GetValue<string>()) : null,
-                        ExpirationDate = !row.Cell(6).IsEmpty() ? getDate(row.Cell(6).GetValue<string>()) : null,
+                        SixMonthsBeforeExpirationDate = expirationDate.HasValue ? expirationDate.Value.AddMonths(-6) : null,
+                        ExpirationDate = expirationDate,
                         Notification = !row.Cell(7).IsEmpty() ? row.Cell(7).GetValue<string?>() : null
                     };
-
-                    // Se valida que los campos requeridos sean correctos
-                    if (employee.EmployeeNumber == 0)
-                        errors.Add($"Fila {row.RowNumber()}: El nombre es requerido.");
-                    else
-                        trustControls.Add(employee);
+                    
+                    trustControls.Add(employee);
                 }
                 catch (Exception ex)
                 {
@@ -137,8 +149,8 @@ public class TrustControlService
     /// <param name="PhoneNumber"></param>
     /// <param name="Email"></param>
     /// <returns>Lista de DTOs</returns>
-    public async Task<List<EmployeeDto>> GetTrustControlsAsync(int pageNumber, int? Id = null, string? Name = null, string? Lastname = null, string? Rfc = null, string? Curp = null,
-        string? Cuip = null, string? PhoneNumber = null, string? Email = null)
+    public async Task<List<TrustControlDto>> GetTrustControlsAsync(int pageNumber, int? Id = null, string? Name = null, string? Lastname = null, string? Rfc = null, string? Curp = null,
+        string? Cuip = null, string? PhoneNumber = null)
     {
         try
         {
@@ -155,25 +167,26 @@ public class TrustControlService
                     && (Curp == null || (e.Curp != null && e.Curp.Contains(Curp)))
                     && (Cuip == null || (e.Cuip != null && e.Cuip.Contains(Cuip)))
                     && (PhoneNumber == null || (e.PhoneNumber != null && e.PhoneNumber.Contains(PhoneNumber)))
-                    && (Email == null || (e.Email != null && e.Email.Contains(Email)))
                     )
                 .Skip((pageNumber - 1) * PageSize)//Salta la cantidad de elementos calculada
                 .Take(PageSize)
                 .ToListAsync();
 
             //Se genera la lista de objetos DTO que se enviarán al cliente, solo se incluyen los campos necesarios para mostrar en la tabla
-            var result = new List<EmployeeDto>();
+            var result = new List<TrustControlDto>();
             foreach (var employee in query)
             {
-                var newEmployee = new EmployeeDto
+                DateOnly? expirationDate = employee.CeccResults?.LastOrDefault()?.ExpirationDate;
+                var newEmployee = new TrustControlDto
                 {
                     Id = employee.Id,
                     Name = employee.Name,
                     LastName = employee.LastName,
                     Rfc = employee.Rfc ?? "",
+                    Curp = employee.Curp ?? "",
                     Cuip = employee.Cuip ?? "",
                     PhoneNumber = employee.PhoneNumber ?? "",
-                    Email = employee.Email ?? ""
+                    ExpirationDate = expirationDate != null ? expirationDate?.ToString("dd/MMM/yyyy") ?? "" : ""
                 };
                 result.Add(newEmployee);
             }
@@ -197,6 +210,7 @@ public class TrustControlService
         try
         {
             var res = await _DbContext.Employees
+                .Include(e => e.PayrollRecord)
                 .Include(e => e.CeccResults)
                 .FirstOrDefaultAsync(x => x.Id == Id);
             return res ?? new();

@@ -1,0 +1,362 @@
+﻿@if (_isVisible)
+{
+    <div class="modal-overlay" @onclick="Close">
+        <div class="modal-container" @onclick:stopPropagation="true">
+
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <span class="modal-icon">👤</span>
+                    <div>
+                        <h2 class="modal-title">Resultado Control de Confianza</h2>
+                        <p class="modal-subtitle">ID #@_editTrustControl.Id</p>
+                    </div>
+                </div>
+                <button class="modal-close" @onclick="Close">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="field-grid">
+
+                    <div class="field-group full-width">
+                        <label class="field-label">Número de Empleado</label>
+                        <input class="field-input" type="number" min="1" step="1"
+                               @bind="_editTrustControl.Id" placeholder="Ej. 10042" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Nombre(s)</label>
+                        <input class="field-input" type="text"
+                               @bind="_editTrustControl.Name" placeholder="Nombre" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Apellidos</label>
+                        <input class="field-input" type="text"
+                               @bind="_editTrustControl.LastName" placeholder="Apellidos" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">RFC</label>
+                        <input class="field-input" type="text"
+                               @bind="_editTrustControl.Rfc" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">CURP</label>
+                        <input class="field-input" type="text"
+                               @bind="_editTrustControl.Curp" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">CUIP</label>
+                        <input class="field-input" type="text"
+                               @bind="_editTrustControl.Cuip" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Núm. de oficio resultado SSC</label>
+                        <input class="field-input" type="text"
+                               @bind="_editTrustControl.CeccResults.LastOrDefault()?.OfficialLetter"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Fecha del oficio de resultado</label>
+                        <input class="field-input" type="text" placeholder="31/01/2020"
+                               @bind="_editTrustControl.CeccResults.LastOrDefault()?.OfficialLetterDate" />
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Resultado</label>
+                        <select @onchange="OnIsApprovedChanged" name="Result" id="Result">
+                            <option value="">-- Seleccione --</option>
+                            <option value="True" selected="@(_editTrustControl.CeccResults.LastOrDefault()?.IsApproved == true)">Aprovado</option>
+                            <option value="False" selected="@(_editTrustControl.CeccResults.LastOrDefault()?.IsApproved == false)">NO aprovado</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">¿Está vigente?</label>
+                        <select @onchange="OnIsInforceChanged" name="Result" id="Result">
+                            <option value="">-- Seleccione --</option>
+                            <option value="True" selected="@(_editTrustControl.CeccResults.LastOrDefault()?.IsInforce == true)">SÍ</option>
+                            <option value="False" selected="@(_editTrustControl.CeccResults.LastOrDefault()?.IsInforce == false)">NO</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Fecha de vencimiento</label>
+                        <input class="field-input" type="text" placeholder="31/01/2023"
+                               @bind="_editTrustControl.CeccResults.LastOrDefault()?.ExpirationDate" />
+                    </div>
+                    @* -------------------------------------- *@
+                    <div class="field-group">
+                        <label class="field-label">Servico profesional de carrera</label>
+                        <select @bind="_editTrustControl.PayrollRecord?.ProfessionalCareerServiceId" name="ProfessionalCareerService" id="ProfessionalCareerService">
+                            <option value="">-- Seleccione --</option>
+                            @foreach(var service in _ProfessionalCareerServices)
+                            {
+                                if(_editTrustControl.PayrollRecord?.ProfessionalCareerServiceId != service.Key)
+                                {
+                                    <option value=@service.Key>@service.Value</option>
+                                }
+                                else
+                                {
+                                    <option value=@service.Key selected>@service.Value</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Designación directa</label>
+                        <select @onchange="OnIsInforceChanged" name="Result" id="Result">
+                            <option value="">-- Seleccione --</option>
+                            <option value="True" selected="@(_editTrustControl.PayrollRecord?.IsDirectDesignation == true)">SÍ</option>
+                            <option value="False" selected="@(_editTrustControl.PayrollRecord?.IsDirectDesignation == false)">NO</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" @onclick="Close">Cancelar</button>
+                <button class="btn-save" @onclick="Save">
+                    <span>Guardar Cambios</span>
+                </button>
+                <button class="btn-download" @onclick="DownloadPdf">Descargar</button>
+            </div>
+
+        </div>
+    </div>
+}
+
+<style>
+    /* ── Overlay ─────────────────────────────────────────── */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 14, 26, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: overlayIn .18s ease;
+    }
+
+    @@keyframes overlayIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* ── Container ───────────────────────────────────────── */
+    .modal-container {
+        background: #ffffff;
+        border-radius: 16px;
+        width: min(1600px, 95vw);
+        height: min(800px, 80vw);
+        display: flex;
+        flex-direction: column;
+        box-shadow:
+            0 4px 6px rgba(0,0,0,.04),
+            0 20px 60px rgba(0,0,0,.18);
+        animation: slideUp .22s cubic-bezier(.34,1.26,.64,1);
+        overflow: hidden;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    @@keyframes slideUp {
+        from { opacity: 0; transform: translateY(28px) scale(.97); }
+        to   { opacity: 1; transform: translateY(0)   scale(1);    }
+    }
+
+    /* ── Header ──────────────────────────────────────────── */
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 28px 18px;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #b08805 0%, #ebb810 100%);
+    }
+
+    .modal-title-group {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .modal-icon {
+        font-size: 2rem;
+        background: rgba(255,255,255,.15);
+        border-radius: 10px;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -.01em;
+    }
+
+    .modal-subtitle {
+        margin: 2px 0 0;
+        font-size: .8rem;
+        color: rgba(255,255,255,.65);
+    }
+
+    .modal-close {
+        background: rgba(255,255,255,.15);
+        border: none;
+        color: #fff;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background .15s;
+        flex-shrink: 0;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,.28); }
+
+    /* ── Body ────────────────────────────────────────────── */
+    .modal-body {
+        padding: 24px 28px;
+        overflow-y: auto;
+        flex: 1 1 0;
+        min-height: 0;
+        /* Custom scrollbar */
+        scrollbar-width: thin;
+        scrollbar-color: #c5cfe8 transparent;
+    }
+
+    .modal-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .modal-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+        background: #c5cfe8;
+        border-radius: 99px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb:hover {
+        background: #1e5799;
+    }
+
+    .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Cantidad de columnas */
+        gap: 18px 20px;
+    }
+
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-group.full-width { grid-column: 1 / -1; }
+
+    .field-label {
+        font-size: .75rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+    }
+
+    .field-input {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 9px 13px;
+        font-size: .92rem;
+        color: #111827;
+        background: #f9fafb;
+        transition: border-color .15s, box-shadow .15s, background .15s;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .field-input:focus {
+        border-color: #1e5799;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(30,87,153,.12);
+    }
+
+    .field-input:hover:not(:focus) {
+        border-color: #9ca3af;
+        background: #ffffff;
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 16px 28px 22px;
+        border-top: 1px solid #f0f0f0;
+        flex-shrink: 0;
+    }
+
+    .btn-cancel {
+        background: #660b03;
+        border: 1.5px solid #d1d5db;
+        color: #FFFFFF;
+        padding: 9px 22px;
+        border-radius: 8px;
+        font-size: .9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: border-color .15s, background .15s;
+    }
+
+    .btn-cancel:hover {
+        border-color: #9ca3af;
+        background: #a31205;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #1a3a6b 0%, #1e5799 100%);
+        border: none;
+        color: #ffffff;
+        padding: 9px 26px;
+        border-radius: 8px;
+        font-size: .9rem;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: .01em;
+        transition: opacity .15s, transform .12s;
+        box-shadow: 0 2px 8px rgba(30,87,153,.35);
+    }
+
+    .btn-save:hover  { opacity: .9; transform: translateY(-1px); }
+    .btn-save:active { opacity: 1;  transform: translateY(0);    }
+
+    .btn-download {
+        background: #0a7344;
+        border: 1.5px solid #d1d5db;
+        color: #FFFFFF;
+        padding: 9px 22px;
+        border-radius: 8px;
+        font-size: .9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: border-color .15s, background .15s;
+    }
+
+    .btn-download:hover {
+        border-color: #9ca3af;
+        background: #0d9e5d;
+    }
+
+    @@media (max-width: 900px) {
+        .field-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @@media (max-width: 600px) {
+        .field-grid { grid-template-columns: 1fr; }
+        .modal-body { padding: 18px; }
+        .modal-header, .modal-footer { padding-left: 18px; padding-right: 18px; }
+    }
+</style>
