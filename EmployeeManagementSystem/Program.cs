@@ -46,9 +46,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<PdfService>();
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddScoped<IStatesService, StatesService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
+builder.Services.AddScoped<ITrustControlService, TrustControlService>();
+builder.Services.AddScoped<IPayrollRecordService, PayrollRecordService>();
 
 var app = builder.Build();
 

@@ -13,7 +13,7 @@
 
         <div class="nav-dropdown">
             <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.Employees)">
-                EMPLEADOS
+                PERSONAL
             </span>
             @if (openSubmenu == OpenSubmenu.Employees)
             {
@@ -29,24 +29,41 @@
         </div>
 
         <div class="nav-dropdown">
-            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.Reports)">
-                CONSULTAS
+            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.PayrollRecord)">
+                DATOS LABORALES
             </span>
-            @if (openSubmenu == OpenSubmenu.Reports)
+            @if (openSubmenu == OpenSubmenu.PayrollRecord)
             {
                 <div class="dropdown-menu-panel">
-                    <NavLink class="dropdown-item" href="queries1" @onclick="CloseSubMenu">
-                        <span class="bi bi-plus-square-fill"></span>Opción 1
+                    <NavLink class="dropdown-item" href="PayrollRecordRegister" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Registrar
                     </NavLink>
-                    <NavLink class="dropdown-item" href="queries2" @onclick="CloseSubMenu">
-                        <span class="bi bi-plus-square-fill"></span>Opción 2
+                    @* <NavLink class="dropdown-item" href="EmployeeQueries" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Consultar
+                    </NavLink> *@
+                </div>
+            }
+        </div>
+
+        <div class="nav-dropdown">
+            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.TrustControl)">
+                CONTROL DE CONFIANZA
+            </span>
+            @if (openSubmenu == OpenSubmenu.TrustControl)
+            {
+                <div class="dropdown-menu-panel">
+                    <NavLink class="dropdown-item" href="TrustControlRegister" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Registro
+                    </NavLink>
+                    <NavLink class="dropdown-item" href="TrustControlQueries" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Consultas
                     </NavLink>
                 </div>
             }
         </div>
 
-        <NavLink class="nav-link" href="reports">REPORTES</NavLink>
-        <NavLink class="nav-link" href="career">TRAYECTORIA</NavLink>
+        @* <NavLink class="nav-link" href="reports">REPORTES</NavLink>
+        <NavLink class="nav-link" href="career">TRAYECTORIA</NavLink> *@
     </div>
 </nav>
 
@@ -61,7 +78,8 @@
     {
         None,
         Employees,
-        Reports
+        PayrollRecord,
+        TrustControl
     }
 
     private OpenSubmenu openSubmenu = OpenSubmenu.None;
