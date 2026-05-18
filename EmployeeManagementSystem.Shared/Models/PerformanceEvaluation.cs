@@ -13,7 +13,7 @@ public partial class PerformanceEvaluation
 
     public decimal FinalTestScore { get; set; }
 
-    public int PerformanceLevelId { get; set; }
+    public int? PerformanceLevelId { get; set; }
 
     public DateOnly? AcknowledgementDate { get; set; }
 

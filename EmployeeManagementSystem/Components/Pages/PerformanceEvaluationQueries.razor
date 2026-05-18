@@ -1,4 +1,4 @@
-﻿@page "/TrustControlQueries"
+﻿@page "/PerformanceEvaluationQueries"
 @using EmployeeManagementSystem.Components.Modals
 @rendermode InteractiveServer
 
@@ -26,6 +26,10 @@
                     <label>RFC</label>
                     <input @bind="_rfc" type="text" />
                 </div>
+                @* <div class="form-group">
+                    <label>CURP</label>
+                    <input @bind="_curp" type="text" />
+                </div> *@
                 <div class="form-group">
                     <label>CUIP</label>
                     <input @bind="_cuip" type="text" />
@@ -56,12 +60,12 @@
                         <th>CURP</th>
                         <th>CUIP</th>
                         <th>Teléfono</th>
-                        <th>Fecha de vencimiento</th>
+                        <th>Nivel de desempeño</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var employee in _Employees)
+                    @foreach (var employee in _performanceEvaluations)
                     {
                         <tr>
                             <td>@employee.Id</td>
@@ -79,7 +83,7 @@
                             <td>@employee.Curp</td>
                             <td>@employee.Cuip</td>
                             <td>@employee.PhoneNumber</td>
-                            <td>@(employee.ExpirationDate.ToString() ?? "")</td>
+                            <td>@employee.PerformanceLevel</td>
                             <td class="buttonTable">
                                 <button @onclick="() => OpenModal(employee.Id)" class="btn btn-primary btn-sm fw-bold customButton2">
                                     Abrir
@@ -129,7 +133,7 @@ else
         <div class="spinner"></div>
     </div>
 }
-<TrustControlInformationModal @ref="_modal" OnSave="HandleSave" />
+<PerformanceEvaluationModal @ref="_modal" OnSave="HandleSave" />
 
 <style>
     /* Keeps the pairs side-by-side */
@@ -155,25 +159,25 @@ else
     }
 
     .customButton1 {
-        background: #f4ac32;
+        background: #9f86c0;
         color: black;
         font-size: 18px;
         font-weight: bold;
     }
 
     .customButton1:hover {
-        background: #ffe99c !important;
+            background: #be95c4 !important;
         color: black !important;
     }
 
     .customButton2 {
-        background: #ffd131 !important;
+        background: #9f86c0 !important;
         color: black !important;
     }
 
-    .customButton2:hover {
-        background: #ffe99c !important;
-    }
+        .customButton2:hover {
+            background: #be95c4 !important;
+        }
 
     table {
         table-layout: fixed;
@@ -189,7 +193,7 @@ else
     }
 
     th {
-        background-color: #facc6b;
+        background-color: #e0b1cb;
         color: black;
     }
 

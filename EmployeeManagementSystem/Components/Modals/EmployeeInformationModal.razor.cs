@@ -11,6 +11,7 @@ public partial class EmployeeInformationModal
 
     private bool _isVisible = false;
     private Employee _editEmployee = new();
+    private bool _isLoading = false;
 
     private Dictionary<int, string> _States = new Dictionary<int, string>
     {
@@ -78,8 +79,23 @@ public partial class EmployeeInformationModal
 
     private async Task Save()
     {
-        await OnSave.InvokeAsync(_editEmployee);
-        _isVisible = false;
+        _isLoading = true;
+        StateHasChanged();
+        await Task.Delay(200);
+        try
+        {
+            await OnSave.InvokeAsync(_editEmployee);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}");
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+            _isVisible = false;
+        }        
     }
 
     void OnStatusChanged(ChangeEventArgs e)
