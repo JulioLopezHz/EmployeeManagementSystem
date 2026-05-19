@@ -1,20 +1,20 @@
-﻿@page "/TrustControlRegister"
+﻿@page "/PerformanceEvaluationRegister"
 @rendermode InteractiveServer
 
 <PageTitle>Import Users</PageTitle>
 
 <div class="import-container">
-    <h2>Registro de información. Resultados del CECC</h2>
+    <h2>Registro de información. Evaluación de desempeño</h2>
 
     <div class="upload-section">
-        <label class="form-label fw-semibold">Seleccione el archivo Excel: Registro_Resultados_CECC (.xlsx / .xls)</label>
-    
+        <label class="form-label fw-semibold">Seleccione el archivo Excel: Registro_Evaluación_Desempeño (.xlsx / .xls)</label>
+
         <div class="input-group">
             @* This button triggers the hidden file input *@
             <label class="btn btn-outline-secondary customButton1" for="fileInput">
                 Abrir
             </label>
-        
+
             @* This displays the filename or a custom message in Spanish *@
             <span class="form-control bg-light">
                 @(_selectedFile?.Name ?? "Ningún archivo seleccionado")
@@ -111,14 +111,14 @@
     }
 
     .customButton1 {
-        background: #b08805;
-        color: white;
+        background: #9f86c0;
+        color: black;
         font-size: 20px;
         font-weight: bold;
     }
 
     .customButton2 {
-        background-color: #f2d05e !important;
+        background-color: #be95c4 !important;
         color: black !important;
         font-size: 20px;
         font-weight: bold;

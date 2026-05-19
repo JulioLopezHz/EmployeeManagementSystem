@@ -2,9 +2,8 @@
 @rendermode InteractiveServer
 <nav class="navbar-container">
     <div class="navbar-brand">
-        @* Add your Socialight logo here *@
         <NavLink href="" Match="NavLinkMatch.All">
-            @* <img src="images/logo.png" alt="SOCIALIGHT" class="logo-img" /> *@
+            <img src="Images/Logo_Dependencia.png" alt="SOCIALIGHT" class="logo-img" width="200"/>
         </NavLink>
     </div>
 
@@ -62,8 +61,22 @@
             }
         </div>
 
-        @* <NavLink class="nav-link" href="reports">REPORTES</NavLink>
-        <NavLink class="nav-link" href="career">TRAYECTORIA</NavLink> *@
+        <div class="nav-dropdown">
+            <span class="nav-link nav-link-toggle" @onclick="() => ToggleSubMenu(OpenSubmenu.PerformanceEvaluation)">
+                EVALUACION DEL DESEMPEÑO
+            </span>
+            @if (openSubmenu == OpenSubmenu.PerformanceEvaluation)
+            {
+                <div class="dropdown-menu-panel">
+                    <NavLink class="dropdown-item" href="PerformanceEvaluationRegister" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Registro
+                    </NavLink>
+                    <NavLink class="dropdown-item" href="PerformanceEvaluationQueries" @onclick="CloseSubMenu">
+                        <span class="bi bi-plus-square-fill"></span>Consultas
+                    </NavLink>
+                </div>
+            }
+        </div>
     </div>
 </nav>
 
@@ -79,7 +92,8 @@
         None,
         Employees,
         PayrollRecord,
-        TrustControl
+        TrustControl,
+        PerformanceEvaluation
     }
 
     private OpenSubmenu openSubmenu = OpenSubmenu.None;

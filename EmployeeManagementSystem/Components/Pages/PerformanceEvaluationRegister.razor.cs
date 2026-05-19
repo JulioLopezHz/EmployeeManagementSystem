@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace EmployeeManagementSystem.Components.Pages;
 
-public partial class PayrollRecordRegister
+public partial class PerformanceEvaluationRegister
 {
-    private readonly IPayrollRecordService _PayrollRecordService;
+    private readonly IPerformanceEvaluationService _PerformanceEvaluationService;
     private IBrowserFile? _selectedFile;
     private string _fileInfo = string.Empty;
     private List<string> _validationErrors = new();
@@ -16,9 +16,9 @@ public partial class PayrollRecordRegister
 
     private const long MaxFileSizeBytes = 10 * 1024 * 1024; // 10 MB
 
-    public PayrollRecordRegister(IPayrollRecordService payrollRecordService)
+    public PerformanceEvaluationRegister(IPerformanceEvaluationService performanceEvaluationService)
     {
-        _PayrollRecordService = payrollRecordService;
+        _PerformanceEvaluationService = performanceEvaluationService;
     }
 
     private void OnFileSelected(InputFileChangeEventArgs e)
@@ -34,11 +34,12 @@ public partial class PayrollRecordRegister
         }
 
         var fileNameWithoutExt = Path.GetFileNameWithoutExtension(_selectedFile.Name);
-        if (!fileNameWithoutExt.Equals("Registro_Datos_Laborales", StringComparison.OrdinalIgnoreCase))
+        if (!fileNameWithoutExt.Equals("Registro_Evaluación_Desempeño", StringComparison.OrdinalIgnoreCase))
         {
-            _errorMessage = "Solo se acepta el archivo llamado 'Registro_Datos_Laborales' (ejemplo: Registro_Datos_Laborales.xlsx).";
+            _errorMessage = "Solo se acepta el archivo llamado 'Registro_Evaluación_Desempeño' (ejemplo: Registro_Evaluación_Desempeño.xlsx).";
             return;
         }
+
 
         if (_selectedFile.Size > MaxFileSizeBytes)
         {
@@ -59,14 +60,12 @@ public partial class PayrollRecordRegister
             _isProcessing = true;
             _validationErrors.Clear();
 
-            // OpenReadStream has a default max size of 512KB. 
-            // Adjust maxAllowedSize if your Excel files are large.
             using var stream = _selectedFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
             ms.Position = 0;
 
-            var result = await _PayrollRecordService.ImportPayrollRecordsFromExcelAsync(ms);
+            var result = await _PerformanceEvaluationService.ImportPerformanceEvaluationFromExcelAsync(ms);
 
             if (result.count > 0 && !result.errors.Any(e => e.Contains("base de datos")))
                 _successMessage = $"Se importaron {result.count} usuarios correctamente.";

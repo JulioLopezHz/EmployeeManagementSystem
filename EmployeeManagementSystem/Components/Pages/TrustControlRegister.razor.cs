@@ -29,13 +29,20 @@ public partial class TrustControlRegister
         var ext = Path.GetExtension(_selectedFile.Name).ToLowerInvariant();
         if (ext is not ".xlsx" and not ".xls")
         {
-            _errorMessage = "Only .xlsx and .xls files are supported.";
+            _errorMessage = "Sólo se pueden procesar archivos .xlsx y .xls.";
+            return;
+        }
+
+        var fileNameWithoutExt = Path.GetFileNameWithoutExtension(_selectedFile.Name);
+        if (!fileNameWithoutExt.Equals("Registro_Resultados_CECC", StringComparison.OrdinalIgnoreCase))
+        {
+            _errorMessage = "Solo se acepta el archivo llamado 'Registro_Resultados_CECC' (ejemplo: Registro_Resultados_CECC.xlsx).";
             return;
         }
 
         if (_selectedFile.Size > MaxFileSizeBytes)
         {
-            _errorMessage = $"File exceeds the 10 MB limit ({_selectedFile.Size / 1024.0 / 1024.0:F2} MB).";
+            _errorMessage = $"El archivo escede el límite de 10 MB ({_selectedFile.Size / 1024.0 / 1024.0:F2} MB).";
             return;
         }
 

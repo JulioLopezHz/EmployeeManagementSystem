@@ -40,6 +40,7 @@ public class PayrollRecordService : IPayrollRecordService
                 try
                 {
                     var employeeNumber = row.Cell(1).GetValue<int>();
+                    var payrollPositionId = !row.Cell(15).IsEmpty() ? row.Cell(15).GetValue<int>() : 0;
 
                     if (employeeNumber == 0)
                     {
@@ -56,7 +57,7 @@ public class PayrollRecordService : IPayrollRecordService
 
                     var payrollRecord = new PayrollRecord
                     {
-                        EmployeeNumber = row.Cell(1).GetValue<int>(),
+                        EmployeeNumber = employeeNumber,
                         StartDate = !row.Cell(2).IsEmpty() ? getDate(row.Cell(2).GetValue<string>()) : null,
                         IsDirectDesignation = !row.Cell(3).IsEmpty() ? getBool(row.Cell(3).GetValue<string>()) : null,
                         ProfessionalCareerServiceId = !row.Cell(5).IsEmpty() ? row.Cell(5).GetValue<int>() : null,
@@ -65,7 +66,14 @@ public class PayrollRecordService : IPayrollRecordService
                         PayrollPeriod = !row.Cell(8).IsEmpty() ? getDate(row.Cell(8).GetValue<string>()) : null,
                         IsEnabled = !row.Cell(9).IsEmpty() ? getBool(row.Cell(9).GetValue<string>()) ?? false : false,
                         PayrollBranchId = !row.Cell(11).IsEmpty() ? row.Cell(11).GetValue<int>() : null,
-                        PaymentAreaId = !row.Cell(13).IsEmpty() ? row.Cell(13).GetValue<int>() : null
+                        PaymentAreaId = !row.Cell(13).IsEmpty() ? row.Cell(13).GetValue<int>() : null,
+                        PayrollPositionRecords = payrollPositionId >  0 ? new List<PayrollPositionRecord>{
+                            new PayrollPositionRecord
+                            {
+                                EmployeeNumber = employeeNumber,
+                                PayrollPositionId = payrollPositionId,
+                            }
+                        } : new List<PayrollPositionRecord>()
                     };
 
                     payrollRecords.Add(payrollRecord);

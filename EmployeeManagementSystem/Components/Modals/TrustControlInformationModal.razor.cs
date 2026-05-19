@@ -15,6 +15,7 @@ public partial class TrustControlInformationModal
 
     private bool _isVisible = false;
     private Employee _editTrustControl = new();
+    private bool _isLoading = false;
 
     private Dictionary<int, string> _ProfessionalCareerServices = new Dictionary<int, string>
     {
@@ -35,7 +36,7 @@ public partial class TrustControlInformationModal
     {
         _isVisible = false;
     }
-
+    
     private async Task Save()
     {
         await OnSave.InvokeAsync(_editTrustControl);
@@ -71,9 +72,12 @@ public partial class TrustControlInformationModal
 
     private async Task DownloadPdf()
     {
+        _isLoading = true;
+        StateHasChanged();
+        await Task.Delay(200);
         try
         {
-            var bytes = _PdfService.GenerateTrustControlPdf(_editTrustControl);
+            var bytes = await _PdfService.GenerateTrustControlPdf(_editTrustControl);
             string base64 = Convert.ToBase64String(bytes);
             string fileName = $"Control y Confianza Empleado_{_editTrustControl.Id}.pdf";
             await _JS.InvokeVoidAsync("downloadFile", fileName, base64);
@@ -82,6 +86,11 @@ public partial class TrustControlInformationModal
         catch (Exception ex)
         {
             Console.WriteLine($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}");
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
         }
     }
 }

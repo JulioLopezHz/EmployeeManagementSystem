@@ -52,6 +52,7 @@ builder.Services.AddScoped<IStatesService, StatesService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<ITrustControlService, TrustControlService>();
 builder.Services.AddScoped<IPayrollRecordService, PayrollRecordService>();
+builder.Services.AddScoped<IPerformanceEvaluationService, PerformanceEvaluationService>();
 
 var app = builder.Build();
 
