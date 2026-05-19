@@ -29,13 +29,20 @@ public partial class EmployeesRegister
         var ext = Path.GetExtension(_selectedFile.Name).ToLowerInvariant();
         if (ext is not ".xlsx" and not ".xls")
         {
-            _errorMessage = "Only .xlsx and .xls files are supported.";
+            _errorMessage = "Sólo se pueden procesar archivos .xlsx y .xls.";
+            return;
+        }
+
+        var fileNameWithoutExt = Path.GetFileNameWithoutExtension(_selectedFile.Name);
+        if (!fileNameWithoutExt.Equals("Registro_Datos_Generales", StringComparison.OrdinalIgnoreCase))
+        {
+            _errorMessage = "Solo se acepta el archivo llamado 'Registro_Datos_Generales' (ejemplo: Registro_Datos_Generales.xlsx).";
             return;
         }
 
         if (_selectedFile.Size > MaxFileSizeBytes)
         {
-            _errorMessage = $"File exceeds the 10 MB limit ({_selectedFile.Size / 1024.0 / 1024.0:F2} MB).";
+            _errorMessage = $"El archivo escede el límite de 10 MB ({_selectedFile.Size / 1024.0 / 1024.0:F2} MB).";
             return;
         }
 

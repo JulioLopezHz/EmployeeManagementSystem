@@ -34,9 +34,9 @@ public partial class PerformanceEvaluationRegister
         }
 
         var fileNameWithoutExt = Path.GetFileNameWithoutExtension(_selectedFile.Name);
-        if (!fileNameWithoutExt.Equals("Evaluación_Desempeño", StringComparison.OrdinalIgnoreCase))
+        if (!fileNameWithoutExt.Equals("Registro_Evaluación_Desempeño", StringComparison.OrdinalIgnoreCase))
         {
-            _errorMessage = "Solo se acepta el archivo llamado 'Evaluación_Desempeño' (ejemplo: Evaluación_Desempeño.xlsx).";
+            _errorMessage = "Solo se acepta el archivo llamado 'Registro_Evaluación_Desempeño' (ejemplo: Registro_Evaluación_Desempeño.xlsx).";
             return;
         }
 

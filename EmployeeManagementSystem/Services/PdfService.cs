@@ -130,7 +130,7 @@ public class PdfService
                 var fontTitle = new XFont("Arial", 18, XFontStyle.Bold);
                 var fontHeader = new XFont("Arial", 12, XFontStyle.Bold);
                 var fontBody = new XFont("Arial", 11, XFontStyle.Regular);
-                var fontFooter = new XFont("Arial", 10, XFontStyle.Italic);
+                var fontFooter = new XFont("Arial", 9, XFontStyle.Regular);
 
                 // 3. Draw Header Section (IFPES)
                 gfx.DrawString($"Fecha: {DateTime.Now.ToString("dd/MMMM/yyyy", culture)}", fontHeader, XBrushes.Black, new XRect(-40, 40, page.Width, 20), XStringFormats.TopRight);
@@ -165,20 +165,17 @@ public class PdfService
                 DrawRow("Fecha de acuse:", performanceEvaluation.AcknowledgementDate?.ToString("dd/MMMM/yyyy", culture));
                 DrawRow("Fecha de entrega de la unidad:", performanceEvaluation.UnitDeliveryDate?.ToString("dd/MMMM/yyyy", culture));
                 DrawRow("Oficio de entrega:", performanceEvaluation.DeliveryLetter);
-                //DrawRow("Observación o incidencia:", performanceEvaluation.Observations);
-                //DrawRow("Plan individual de acción:", performanceEvaluation.IndividualActionPlan);
 
+                double rectWidth = page.Width - startX - 60;                
                 gfx.DrawString("Observación o incidencia:", fontHeader, XBrushes.Black, new XPoint(startX, currentY));
-                tf.DrawString(performanceEvaluation.Observations ?? "", fontBody, XBrushes.Black, new XRect(startX + 220, currentY, 100, 50));
+                currentY += 10;
+                tf.DrawString(performanceEvaluation.Observations ?? "", fontFooter, XBrushes.Black, new XRect(startX, currentY, rectWidth, 300));
 
-                //currentY += lineSpacing;
-                //gfx.DrawString("Plan individual de acción:", fontHeader, XBrushes.Black, new XPoint(startX, currentY));
-                //gfx.DrawString(performanceEvaluation.IndividualActionPlan ?? "", fontHeader, XBrushes.Black, new XPoint(startX + 220, currentY));
+                currentY += 210;
+                gfx.DrawString("Plan individual de acción:", fontHeader, XBrushes.Black, new XPoint(startX, currentY));
+                currentY += 10;
+                tf.DrawString(performanceEvaluation.IndividualActionPlan ?? "", fontFooter, XBrushes.Black, new XRect(startX, currentY, rectWidth, 300));
 
-                //currentY += lineSpacing;
-                //DrawRow("Fecha de vencimiento:", performanceEvaluation.CeccResults.LastOrDefault()?.ExpirationDate?.ToString("dd/MMMM/yyyy", culture) ?? "");
-
-                // 7. Save to stream and return bytes
                 using (var stream = new MemoryStream())
                 {
                     document.Save(stream);
@@ -192,67 +189,4 @@ public class PdfService
             return Array.Empty<byte>();
         }
     }
-
-    //void DrawWrappedRow(string label, string value, int maxWidth = 300)
-    //{
-    //    // Draw label normally
-    //    gfx.DrawString(label, fontHeader, XBrushes.Black, new XPoint(startX, currentY));
-
-    //    value ??= "N/A";
-
-    //    // Measure if the value fits in one line
-    //    var size = gfx.MeasureString(value, fontBody);
-
-    //    if (size.Width <= maxWidth)
-    //    {
-    //        // Fits in one line — draw normally
-    //        gfx.DrawString(value, fontBody, XBrushes.Black, new XPoint(startX + 220, currentY));
-    //        currentY += lineSpacing;
-    //    }
-    //    else
-    //    {
-    //        // Split into words and build lines that fit within maxWidth
-    //        var words = value.Split(' ');
-    //        var line = new StringBuilder();
-    //        bool isFirst = true;
-
-    //        foreach (var word in words)
-    //        {
-    //            var test = line.Length == 0 ? word : $"{line} {word}";
-    //            var testSize = gfx.MeasureString(test, fontBody);
-
-    //            if (testSize.Width > maxWidth && line.Length > 0)
-    //            {
-    //                // Draw current line
-    //                int drawX = isFirst ? startX + 220 : startX + 220; // indent continuation lines if needed
-    //                gfx.DrawString(line.ToString(), fontBody, XBrushes.Black, new XPoint(drawX, currentY));
-    //                currentY += lineSpacing;
-    //                isFirst = false;
-
-    //                // Check if new page is needed
-    //                if (currentY > page.Height - 60)
-    //                {
-    //                    page = document.AddPage();
-    //                    gfx = XGraphics.FromPdfPage(page);
-    //                    currentY = 60;
-    //                }
-
-    //                line.Clear();
-    //                line.Append(word);
-    //            }
-    //            else
-    //            {
-    //                line.Clear();
-    //                line.Append(test);
-    //            }
-    //        }
-
-    //        // Draw remaining text
-    //        if (line.Length > 0)
-    //        {
-    //            gfx.DrawString(line.ToString(), fontBody, XBrushes.Black, new XPoint(startX + 220, currentY));
-    //            currentY += lineSpacing;
-    //        }
-    //    }
-    //}
 }
