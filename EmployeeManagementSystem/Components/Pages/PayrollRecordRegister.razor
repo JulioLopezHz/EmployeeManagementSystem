@@ -8,6 +8,14 @@
 
     <div class="upload-section">
         <label class="form-label fw-semibold">Seleccione el archivo Excel: Registro_Datos_Laborales (.xlsx / .xls)</label>
+
+        <div class="mb-2 d-flex justify-content-end">
+            <a href="Templates/Registro_Datos_Laborales.xlsx"
+               download="Registro_Datos_Laborales.xlsx"
+               class="btn btn-outline-success customButtonDownload">
+                <i class="bi bi-download"></i> Descargar plantilla
+            </a>
+        </div>
     
         <div class="input-group">
             @* This button triggers the hidden file input *@
@@ -108,6 +116,13 @@
 
     .custom-file-input:hover::before {
         border-color: #adb5bd;
+    }
+
+    .customButtonDownload {
+        background: #c0f0bb;
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
     }
 
     .customButton1 {
