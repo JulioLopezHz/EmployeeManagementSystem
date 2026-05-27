@@ -156,6 +156,7 @@ public class PdfService
                 DrawRow("RFC:", performanceEvaluation.Rfc);
                 DrawRow("CURP:", performanceEvaluation.Curp);
                 DrawRow("CUIP:", performanceEvaluation.Cuip);
+                DrawRow("Puesto:", performanceEvaluation.LastPayrollPosition ?? "");
 
                 currentY += 10; // Extra spacing
 
