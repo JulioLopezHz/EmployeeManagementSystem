@@ -10,7 +10,20 @@
 
     <div class="upload-section">
         <label class="form-label fw-semibold">Seleccione el archivo Excel: Registro_Datos_Generales (.xlsx / .xls)</label>
-        @* Button to donwload the xlsx template (Registro_Datos_Generales) *@
+        
+        <div class="mb-2 d-flex justify-content-end">
+            <a href="Templates/Registro_Datos_Generales.xlsx" 
+               download="Registro_Datos_Generales.xlsx"
+               class="btn btn-outline-success customButtonDownload">
+                <i class="bi bi-download"></i> Descargar plantilla
+            </a>
+        </div>
+        @* inject IJSRuntime JS
+        <button class="btn btn-outline-success customButton1" @onclick="DownloadTemplate">
+            <i class="bi bi-download"></i> Descargar plantilla
+        </button> *@
+
+
         <div class="input-group">
             @* This button triggers the hidden file input *@
             <label class="btn btn-outline-secondary customButton1" for="fileInput">
@@ -110,6 +123,13 @@
 
     .custom-file-input:hover::before {
         border-color: #adb5bd;
+    }
+
+    .customButtonDownload {
+        background: #c0f0bb;
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
     }
 
     .customButton1 {

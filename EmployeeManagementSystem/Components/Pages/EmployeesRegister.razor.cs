@@ -102,4 +102,9 @@ public partial class EmployeesRegister
         _errorMessage = null;
         _validationErrors = new();
     }
+
+    //private async Task DownloadTemplate()
+    //{
+    //    await JS.InvokeVoidAsync("open", "templates/Registro_Datos_Generales.xlsx", "_blank");
+    //}
 }
